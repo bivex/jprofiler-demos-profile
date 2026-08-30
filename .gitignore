@@ -9,6 +9,9 @@ bin/
 *.analysis/
 flamegraph.html
 async_*.txt
+*.hlog
+*.hgrm
+hiccup*
 
 # macOS / OS files
 .DS_Store
