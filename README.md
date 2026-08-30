@@ -96,12 +96,28 @@ java -agentpath:/opt/homebrew/Cellar/async-profiler/4.5/lib/libasyncProfiler.dyl
 
 ---
 
-## ⚖️ Сравнение JProfiler MCP и Async-Profiler
+## 📈 Режим 3: Измерение пауз и задержек через jHiccup
 
-| Функция | **JProfiler MCP** | **Async-Profiler** |
-|---|---|---|
-| **Уровень детализации** | Высокоуровневый Java-стек, фильтрация по пакетам, бизнес-подсистемы | Низкоуровневый стек (Java + JNI + C/C++ runtime + JVM internals) |
-| **Safepoint Bias** | Минимален при использовании JFR | Полностью отсутствует |
-| **Анализ памяти** | **Heap Dump (State):** сколько памяти *удерживается живыми объектами* прямо сейчас | **Alloc Profiling (Rate):** сколько памяти *было выделено суммарно* в рантайме |
-| **Интерфейс** | JSON-RPC через протокол MCP для AI-агентов | CLI, FlameGraphs HTML, JFR, консольные дампы |
-| **Сравнительный анализ** | Поддержка `baselineFilePath` для A/B сравнения дельт | `jfr-conv` / FlameGraph diff |
+[jHiccup](https://github.com/giltene/jHiccup) измеряет задержки (Hiccups), вызванные паузами GC (Stop-The-World), деоптимизациями JIT, троттлингом ОС и переключением контекста ядра.
+
+### 3.1 Запуск с агентом jHiccup
+```bash
+java -javaagent:jHiccup.jar="-d 0 -i 200 -l hiccup_demo.hlog" -cp bin com.demo.DemoApp
+```
+
+### 3.2 Генерация отчета по перцентилям (HdrHistogram)
+```bash
+java -cp jHiccup.jar org.jhiccup.internal.hdrhistogram.HistogramLogProcessor \
+     -i hiccup_demo.hlog -o hiccup_summary.hgrm
+```
+
+---
+
+## ⚖️ Сравнение инструментов профилирования
+
+| Функция | **JProfiler MCP** | **Async-Profiler** | **jHiccup** |
+|---|---|---|---|
+| **Главная цель** | Анализ архитектуры, CPU Hotspots, Heap Dumps | CPU сэмплинг, C/C++ стек, скорость аллокаций | Измерение задержек (Latency) и пауз GC (Jitter) |
+| **Уровень деталей** | Высокоуровневый Java-код, подсистемы (JDBC/HTTP) | Полный стек (Java + JNI + C++ Runtime + JIT) | Точное распределение задержек (p50...p99.99, max) |
+| **Анализ памяти** | **Heap Dump (State):** сколько удерживается объектами | **Alloc Profiling (Rate):** сколько выделяется байт | Фиксация Stop-The-World пауз сборщика мусора |
+| **Вывод** | JSON-RPC через протокол MCP для AI-агентов | FlameGraphs HTML, flat-дампы | HdrHistogram перцентили, гистограммы задержек |
