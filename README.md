@@ -117,6 +117,8 @@ java -cp jHiccup.jar org.jhiccup.internal.hdrhistogram.HistogramLogProcessor \
 ### 3.3 Визуализация в HTML5 плоттере
 Откройте [`/Volumes/External/Code/jHiccup/jHiccupPlotter.html`](file:///Volumes/External/Code/jHiccup/jHiccupPlotter.html) в любом браузере и перетащите файл `hiccup_demo.hlog` или `hiccup_summary.hgrm.hgrm`.
 
+![jHiccup Modern Plot](examplePlot.png)
+
 ---
 
 ## ⚖️ Сравнение инструментов профилирования
