@@ -1,0 +1,17 @@
+# Compiled binaries
+bin/
+*.class
+
+# Profiling snapshots and heap dumps
+*.jfr
+*.hprof
+*.jps
+*.analysis/
+
+# macOS / OS files
+.DS_Store
+
+# IDE configuration
+.idea/
+*.iml
+.vscode/
