@@ -7,6 +7,8 @@ bin/
 *.hprof
 *.jps
 *.analysis/
+flamegraph.html
+async_*.txt
 
 # macOS / OS files
 .DS_Store
